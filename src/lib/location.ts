@@ -1,4 +1,3 @@
-// src/lib/location.ts
 export function getBrowserLocation(): Promise<{ lat: number; lon: number }> {
 	return new Promise((resolve, reject) => {
 		if (!navigator.geolocation) {

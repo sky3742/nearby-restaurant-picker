@@ -1,7 +1,12 @@
+import { haversineDistance } from './distance';
+import { isOpenNow } from './openingHours';
 import type { Restaurant } from './types';
 
-export async function getRestaurants(lat: number, lon: number): Promise<Restaurant[]> {
-	const radius = 1000;
+export async function getRestaurants(
+	lat: number,
+	lon: number,
+	radius: number = 1000
+): Promise<Restaurant[]> {
 	const query = `
     [out:json];
     (
@@ -23,8 +28,12 @@ export async function getRestaurants(lat: number, lon: number): Promise<Restaura
 	return data.elements
 		.filter((el: any) => el.tags?.name)
 		.map((el: any) => ({
-			name: el.tags.name,
+			id: el.id,
+			name: el.tags.name || 'Unnamed restaurant',
 			lat: el.lat || el.center?.lat,
-			lon: el.lon || el.center?.lon
+			lon: el.lon || el.center?.lon,
+			openingHours: el.tags?.opening_hours || 'Unknown',
+			distance: haversineDistance(lat, lon, el.lat, el.lon),
+			isOpen: el.tags?.openingHours ? isOpenNow(el.tags?.openingHours) : undefined
 		})) as Restaurant[];
 }
