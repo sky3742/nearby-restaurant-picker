@@ -25,4 +25,9 @@
 	});
 </script>
 
+<svelte:head>
+	<title>What To Eat</title>
+	<meta name="description" content="Find nearby restaurants and pick a random one to eat at." />
+</svelte:head>
+
 {@render children()}
