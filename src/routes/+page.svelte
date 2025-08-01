@@ -14,7 +14,7 @@
 
 	let picked: Restaurant;
 	let showFavouritesOnly = false;
-	let showOnlyOpen = true;
+	let showOnlyOpen = false;
 
 	$: restaurants = data.restaurants
 		.filter((r) => !showOnlyOpen || r.isOpen)

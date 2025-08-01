@@ -19,21 +19,16 @@
 			target="_blank"
 			class="flex grow items-center gap-2"
 		>
-			<span
-				class={`size-2 rounded-full ${
-					restaurant.isOpen === true
-						? 'bg-green-500'
-						: restaurant.isOpen === false
-							? 'bg-red-500'
-							: 'bg-gray-400'
-				}`}
-			></span>
+			{#if restaurant.isOpen !== undefined}
+				<span class={`size-2 rounded-full ${restaurant.isOpen ? 'bg-green-500' : 'bg-red-500'}`}
+				></span>
+			{/if}
 			<strong class="dark:text-white">{restaurant.name}</strong>
 		</a>
 		<div class="flex items-center gap-2">
-			<span class="text-sm text-gray-500 dark:text-gray-400"
-				>{restaurant.distance.toFixed(2)} km</span
-			>
+			<span class="text-sm text-gray-500 dark:text-gray-400">
+				{restaurant.distance.toFixed(2)} km
+			</span>
 			<button on:click={() => toggleFavorite(restaurant.id)} class="text-yellow-500">
 				<Star size={16} fill={isFav ? 'currentColor' : 'none'} />
 			</button>

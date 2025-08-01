@@ -8,9 +8,7 @@ export const load: PageServerLoad = async ({ url }) => {
 
 	if (!lat || !lon) return { restaurants: [] };
 
-	const restaurants = (await getRestaurants(lat, lon, distance)).sort(
-		(a, b) => a.distance - b.distance
-	);
+	const restaurants = await getRestaurants(lat, lon, distance);
 
 	return { restaurants, distance };
 };
