@@ -9,10 +9,11 @@ export async function getRestaurants(
 	const query = `
     [out:json];
     (
-      node["amenity"="restaurant"](around:${radius},${lat},${lon});
-      way["amenity"="restaurant"](around:${radius},${lat},${lon});
-      relation["amenity"="restaurant"](around:${radius},${lat},${lon});
-    );
+      node["amenity"~"restaurant|cafe|biergarten"](around:${radius},${lat},${lon});
+      way["amenity"~"restaurant|cafe|biergarten"](around:${radius},${lat},${lon});
+      relation["amenity"~"restaurant|cafe|biergarten"](around:${radius},${lat},${lon});
+    )
+	  ["shop"!~"convenience"];
     out center;
   `;
 
@@ -27,12 +28,15 @@ export async function getRestaurants(
 	return data.elements
 		.filter((el: any) => el.tags?.name)
 		.map((el: any) => ({
-			id: el.id,
-			name: el.tags.name || 'Unnamed restaurant',
+			...el,
 			lat: el.lat || el.center?.lat,
-			lon: el.lon || el.center?.lon,
+			lon: el.lon || el.center?.lon
+		}))
+		.map((el: any) => ({
+			...el,
+			name: el.tags.name || 'Unnamed restaurant',
 			openingHours: el.tags?.opening_hours || 'Unknown',
-			distance: haversineDistance(lat, lon, el.lat, el.lon),
-			isOpen: el.tags?.openingHours ? isOpenNow(el.tags?.openingHours) : undefined
+			isOpen: el.tags?.opening_hours ? isOpenNow(el.tags.opening_hours) : undefined,
+			distance: haversineDistance(lat, lon, el.lat, el.lon)
 		})) as Restaurant[];
 }
