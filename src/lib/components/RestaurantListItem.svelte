@@ -26,7 +26,7 @@
 			<strong class="dark:text-white">{restaurant.name}</strong>
 		</a>
 		<div class="flex items-center gap-2">
-			<span class="text-sm text-gray-500 dark:text-gray-400">
+			<span class="text-sm text-nowrap text-gray-500 dark:text-gray-400">
 				{restaurant.distance.toFixed(2)} km
 			</span>
 			<button on:click={() => toggleFavorite(restaurant.id)} class="text-yellow-500">
