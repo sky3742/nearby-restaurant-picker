@@ -1,12 +1,14 @@
 <script lang="ts">
 	import { getBrowserLocation } from '$lib/location';
 	import { injectAnalytics } from '@vercel/analytics/sveltekit';
+	import { injectSpeedInsights } from '@vercel/speed-insights/sveltekit';
 	import { onMount } from 'svelte';
 	import '../app.css';
 
 	let { children } = $props();
 
 	injectAnalytics();
+	injectSpeedInsights();
 
 	onMount(async () => {
 		const params = new URLSearchParams(window.location.search);
