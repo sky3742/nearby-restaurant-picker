@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { favorites } from '$lib/store/favorites';
+	import { favorites } from '$lib/stores';
 	import type { Restaurant } from '$lib/types';
 	import { getMapLink } from '$lib/utils';
 	import { Star } from 'lucide-svelte';

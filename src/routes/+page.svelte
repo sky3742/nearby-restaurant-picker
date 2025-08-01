@@ -1,11 +1,9 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import PickedCard from '$lib/components/PickedCard.svelte';
-	import RestaurantListItem from '$lib/components/RestaurantListItem.svelte';
-	import RestaurantPickerHeader from '$lib/components/RestaurantPickerHeader.svelte';
-	import { getBrowserLocation } from '$lib/location';
-	import { favorites } from '$lib/store/favorites';
+	import { PickedCard, RestaurantListItem, RestaurantPickerHeader } from '$lib/components';
+	import { favorites } from '$lib/stores';
 	import type { Restaurant } from '$lib/types';
+	import { getBrowserLocation } from '$lib/utils';
 
 	export let data: {
 		restaurants: Restaurant[];

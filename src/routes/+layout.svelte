@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { getBrowserLocation } from '$lib/location';
+	import { getBrowserLocation } from '$lib/utils';
 	import { injectAnalytics } from '@vercel/analytics/sveltekit';
 	import { injectSpeedInsights } from '@vercel/speed-insights/sveltekit';
 	import { onMount } from 'svelte';

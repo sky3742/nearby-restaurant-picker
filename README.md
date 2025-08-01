@@ -8,27 +8,27 @@ Discover nearby restaurants around your current location — and let fate decide
 
 ## 🚀 Features
 
-* 📍 Automatically detect your location
-* 🔍 Search restaurants by typing any address
-* 🎲 Random picker (optionally from favorites only)
-* ❤️ Save your favorite restaurants (stored in localStorage)
-* ⏰ Filter by currently open restaurants
-* 📏 Adjustable search distance (in km)
-* 🗺️ Deep linking to native map apps (Google Maps, Apple Maps, Waze)
-* 🌙 Dark mode support
-* ⚡ Fast performance with SvelteKit SSR
-* 💯 Fully free and based on OpenStreetMap data
+- 📍 Automatically detect your location
+- 🔍 Search restaurants by typing any address
+- 🎲 Random picker (optionally from favorites only)
+- ❤️ Save your favorite restaurants (stored in localStorage)
+- ⏰ Filter by currently open restaurants
+- 📏 Adjustable search distance (in km)
+- 🗺️ Deep linking to native map apps (Google Maps, Apple Maps, Waze)
+- 🌙 Dark mode support
+- ⚡ Fast performance with SvelteKit SSR
+- 💯 Fully free and based on OpenStreetMap data
 
 ---
 
 ## 🧱 Tech Stack
 
-* [SvelteKit](https://kit.svelte.dev/) (SSR enabled)
-* [TailwindCSS](https://tailwindcss.com/)
-* [Overpass API](https://overpass-api.de/) – fetch nearby food/restaurant nodes
-* [Nominatim](https://nominatim.org/) – reverse and address geocoding
-* [opening\_hours.js](https://github.com/opening-hours/opening_hours.js/) – determine open/closed status
-* [LocalStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage) – for persisting favorites
+- [SvelteKit](https://kit.svelte.dev/) (SSR enabled)
+- [TailwindCSS](https://tailwindcss.com/)
+- [Overpass API](https://overpass-api.de/) – fetch nearby food/restaurant nodes
+- [Nominatim](https://nominatim.org/) – reverse and address geocoding
+- [opening_hours.js](https://github.com/opening-hours/opening_hours.js/) – determine open/closed status
+- [LocalStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage) – for persisting favorites
 
 ---
 

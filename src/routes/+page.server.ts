@@ -1,4 +1,4 @@
-import { getRestaurants } from '$lib/overpass';
+import { getRestaurants } from '$lib/apis';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ url }) => {

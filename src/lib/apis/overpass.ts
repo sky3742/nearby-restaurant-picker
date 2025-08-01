@@ -1,6 +1,5 @@
-import { haversineDistance } from './distance';
-import { isOpenNow } from './openingHours';
-import type { Restaurant } from './types';
+import type { Restaurant } from '$lib/types';
+import { haversineDistance, isOpenNow } from '$lib/utils';
 
 export async function getRestaurants(
 	lat: number,
