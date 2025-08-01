@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { Dice5, MapPin, RefreshCcw } from 'lucide-svelte';
+	import { DistanceSelector } from '.';
 
 	let addressInput: string;
 
@@ -18,21 +19,14 @@
 <div class="mb-4 space-y-4">
 	<h1 class="text-2xl font-bold dark:text-white">🍜 Nearby Restaurant Picker</h1>
 
-	<div>
-		<label for="distance" class="mb-1 block font-medium dark:text-gray-200">Distance (meters)</label
-		>
-		<input
-			id="distance"
-			type="number"
-			value={distance}
-			class="w-full rounded border border-gray-300 p-2 dark:border-gray-600 dark:bg-gray-800 dark:text-white"
-			on:change={() => {
-				const params = new URLSearchParams(window.location.search);
-				params.set('distance', distance.toString());
-				goto(`?${params.toString()}`);
-			}}
-		/>
-	</div>
+	<DistanceSelector
+		distance={distance / 1000}
+		onChange={(val) => {
+			const params = new URLSearchParams(window.location.search);
+			params.set('distance', val.toString());
+			goto(`?${params.toString()}`);
+		}}
+	/>
 
 	<div class="flex gap-2">
 		<input
