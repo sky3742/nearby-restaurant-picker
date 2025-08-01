@@ -10,6 +10,7 @@ export default defineConfig({
 		SvelteKitPWA({
 			registerType: 'autoUpdate',
 			devOptions: {
+				suppressWarnings: true, // suppress warnings during development
 				enabled: true // enable during development
 			},
 			manifest: {

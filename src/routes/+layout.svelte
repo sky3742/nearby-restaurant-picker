@@ -3,12 +3,13 @@
 	import { injectAnalytics } from '@vercel/analytics/sveltekit';
 	import { injectSpeedInsights } from '@vercel/speed-insights/sveltekit';
 	import { onMount } from 'svelte';
+	import { pwaInfo } from 'virtual:pwa-info';
 	import '../app.css';
 
 	let { children } = $props();
 
-	injectAnalytics();
-	injectSpeedInsights();
+	injectAnalytics({ debug: false });
+	injectSpeedInsights({ debug: false });
 
 	onMount(async () => {
 		const params = new URLSearchParams(window.location.search);
@@ -28,11 +29,34 @@
 			}
 		}
 	});
+
+	onMount(async () => {
+		if (pwaInfo) {
+			const { registerSW } = await import('virtual:pwa-register');
+			registerSW({
+				immediate: true,
+				onRegistered(r) {
+					// uncomment following code if you want check for updates
+					// r && setInterval(() => {
+					//    console.log('Checking for sw update')
+					//    r.update()
+					// }, 20000 /* 20s for testing purposes */)
+					console.log(`SW Registered: ${r}`);
+				},
+				onRegisterError(error) {
+					console.log('SW registration error', error);
+				}
+			});
+		}
+	});
+
+	const webManifest = $derived(pwaInfo ? pwaInfo.webManifest.linkTag : '');
 </script>
 
 <svelte:head>
 	<title>What To Eat</title>
 	<meta name="description" content="Find nearby restaurants and pick a random one to eat at." />
+	{@html webManifest}
 </svelte:head>
 
 {@render children()}
