@@ -40,6 +40,7 @@
 		]
 	},
 	"dependencies": {
+		"lucide-svelte": "^0.535.0",
 		"opening_hours": "^3.9.0"
 	}
 }
