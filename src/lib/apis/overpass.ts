@@ -12,8 +12,7 @@ export async function getRestaurants(
       node["amenity"~"restaurant|cafe|biergarten"](around:${radius},${lat},${lon});
       way["amenity"~"restaurant|cafe|biergarten"](around:${radius},${lat},${lon});
       relation["amenity"~"restaurant|cafe|biergarten"](around:${radius},${lat},${lon});
-    )
-	  ["shop"!~"convenience"];
+    );
     out center;
   `;
 
