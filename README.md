@@ -1,38 +1,76 @@
-# sv
+# 🍽️ Nearby Restaurant Picker
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+Discover nearby restaurants around your current location — and let fate decide what to eat next.
 
-## Creating a project
+🌐 **Live App:** [sky-eat-what.vercel.app](https://sky-eat-what.vercel.app)
 
-If you're seeing this, you've probably already done this step. Congrats!
+---
 
-```sh
-# create a new project in the current directory
-npx sv create
+## 🚀 Features
 
-# create a new project in my-app
-npx sv create my-app
+* 📍 Automatically detect your location
+* 🔍 Search restaurants by typing any address
+* 🎲 Random picker (optionally from favorites only)
+* ❤️ Save your favorite restaurants (stored in localStorage)
+* ⏰ Filter by currently open restaurants
+* 📏 Adjustable search distance (in km)
+* 🗺️ Deep linking to native map apps (Google Maps, Apple Maps, Waze)
+* 🌙 Dark mode support
+* ⚡ Fast performance with SvelteKit SSR
+* 💯 Fully free and based on OpenStreetMap data
+
+---
+
+## 🧱 Tech Stack
+
+* [SvelteKit](https://kit.svelte.dev/) (SSR enabled)
+* [TailwindCSS](https://tailwindcss.com/)
+* [Overpass API](https://overpass-api.de/) – fetch nearby food/restaurant nodes
+* [Nominatim](https://nominatim.org/) – reverse and address geocoding
+* [opening\_hours.js](https://github.com/opening-hours/opening_hours.js/) – determine open/closed status
+* [LocalStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage) – for persisting favorites
+
+---
+
+## 🛠️ Getting Started
+
+```bash
+git clone https://github.com/your-username/nearby-restaurant-picker.git
+cd nearby-restaurant-picker
+pnpm install
+pnpm dev
 ```
 
-## Developing
+Visit: [http://localhost:5173](http://localhost:5173)
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+---
 
-```sh
-npm run dev
+## 🧹 Project Structure
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+```
+src/
+├── lib/
+│   ├── api/               # API helpers (Overpass, Nominatim)
+│   ├── components/        # Reusable UI components
+│   ├── stores/            # Writable/shared Svelte stores
+│   └── utils.ts           # Utility functions (distance calc, sorting, etc.)
+├── routes/
+│   └── +page.svelte       # Main route with logic & layout
+└── app.html               # HTML template
 ```
 
-## Building
+---
 
-To create a production version of your app:
+## 🤝 Contributing
 
-```sh
-npm run build
-```
+This project is open to contributions! Fork and submit a pull request or open an issue.
 
-You can preview the production build with `npm run preview`.
+---
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+## 🪪 License
+
+[MIT License](LICENSE)
+
+---
+
+Made with ❤️ using Svelte + OpenStreetMap.
