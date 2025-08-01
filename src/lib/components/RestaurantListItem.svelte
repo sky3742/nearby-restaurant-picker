@@ -7,7 +7,7 @@
 	export let restaurant: Restaurant;
 	export let toggleFavorite: (id: string) => void;
 
-	const isFav = $favorites.includes(restaurant.id);
+	$: isFav = $favorites.includes(restaurant.id);
 </script>
 
 <div
