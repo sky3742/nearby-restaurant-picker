@@ -10,9 +10,7 @@
 	$: isFav = $favorites.includes(restaurant.id);
 </script>
 
-<div
-	class="rounded border p-2 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:hover:bg-gray-700"
->
+<div class="card bg-base-200 p-2 text-base-content">
 	<div class="flex items-center justify-between">
 		<a
 			href={getMapLink(restaurant.lat, restaurant.lon)}
@@ -20,17 +18,24 @@
 			class="flex grow items-center gap-2"
 		>
 			{#if restaurant.isOpen !== undefined}
-				<span class={`size-2 rounded-full ${restaurant.isOpen ? 'bg-green-500' : 'bg-red-500'}`}
+				<span
+					class="size-2 rounded-full"
+					class:bg-success={restaurant.isOpen}
+					class:bg-error={!restaurant.isOpen}
 				></span>
 			{/if}
-			<strong class="dark:text-white">{restaurant.name}</strong>
+			<strong>{restaurant.name}</strong>
 		</a>
 		<div class="flex items-center gap-2">
-			<span class="text-sm text-nowrap text-gray-500 dark:text-gray-400">
+			<span class="badge badge-neutral">
 				{restaurant.distance.toFixed(2)} km
 			</span>
-			<button on:click={() => toggleFavorite(restaurant.id)} class="text-yellow-500">
-				<Star size={16} fill={isFav ? 'currentColor' : 'none'} />
+			<button
+				on:click={() => toggleFavorite(restaurant.id)}
+				class:text-warning={isFav}
+				class:text-gray-400={!isFav}
+			>
+				<Star size={16} fill="currentColor" />
 			</button>
 		</div>
 	</div>

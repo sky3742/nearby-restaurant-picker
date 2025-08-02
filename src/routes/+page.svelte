@@ -35,7 +35,7 @@
 				const params = new URLSearchParams(window.location.search);
 				params.set('lat', lat.toString());
 				params.set('lon', lon.toString());
-				goto(`?${params.toString()}`);
+				goto(`?${params.toString()}`, { replaceState: true });
 			})
 			.catch((err) => {
 				console.error('Location error:', err);
@@ -54,7 +54,7 @@
 				const params = new URLSearchParams(window.location.search);
 				params.set('lat', place.lat);
 				params.set('lon', place.lon);
-				goto(`?${params.toString()}`);
+				goto(`?${params.toString()}`, { replaceState: true });
 			});
 	}
 
@@ -65,7 +65,7 @@
 	}
 </script>
 
-<div class="mx-auto max-w-2xl p-4 dark:bg-gray-900 dark:text-white">
+<div class="mx-auto max-w-2xl p-4">
 	<RestaurantPickerHeader
 		{showFavouritesOnly}
 		{showOnlyOpen}
