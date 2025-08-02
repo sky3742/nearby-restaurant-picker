@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
 	import { Dice5, MapPin, RefreshCcw } from 'lucide-svelte';
 	import { DistanceSelector } from '.';
 
@@ -14,19 +13,13 @@
 	export let pickRandom: () => void;
 	export let refreshLocation: () => void;
 	export let useCustomAddress: (val: string) => void;
+	export let distanceChange: (val: number) => void;
 </script>
 
 <div class="mb-4 space-y-4">
 	<h1 class="text-2xl font-bold">🍜 Nearby Restaurant Picker</h1>
 
-	<DistanceSelector
-		distance={distance / 1000}
-		onChange={(val) => {
-			const params = new URLSearchParams(window.location.search);
-			params.set('distance', val.toString());
-			goto(`?${params.toString()}`, { replaceState: true });
-		}}
-	/>
+	<DistanceSelector distance={distance / 1000} onChange={distanceChange} />
 
 	<div class="flex gap-2">
 		<input placeholder="e.g. Mid Valley KL" bind:value={addressInput} class="input grow" />

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { isLoading } from '$lib/stores';
 	import { getBrowserLocation } from '$lib/utils';
 	import { injectAnalytics } from '@vercel/analytics/sveltekit';
 	import { injectSpeedInsights } from '@vercel/speed-insights/sveltekit';
@@ -18,6 +19,7 @@
 
 		if (!hasLat || !hasLon) {
 			try {
+				isLoading.set(true);
 				const { lat, lon } = await getBrowserLocation();
 				params.set('lat', lat.toString());
 				params.set('lon', lon.toString());
@@ -26,6 +28,8 @@
 			} catch (err) {
 				console.error('Failed to get location:', err);
 				alert('Unable to access location. Please enable it in your browser.');
+			} finally {
+				isLoading.set(false);
 			}
 		}
 	});

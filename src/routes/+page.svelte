@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { PickedCard, RestaurantListItem, RestaurantPickerHeader } from '$lib/components';
-	import { favorites } from '$lib/stores';
+	import { favorites, isLoading } from '$lib/stores';
 	import type { Restaurant } from '$lib/types';
 	import { getBrowserLocation } from '$lib/utils';
 
@@ -30,21 +30,26 @@
 	}
 
 	function refreshLocation() {
+		isLoading.set(true);
+
 		getBrowserLocation()
 			.then(({ lat, lon }) => {
 				const params = new URLSearchParams(window.location.search);
 				params.set('lat', lat.toString());
 				params.set('lon', lon.toString());
-				goto(`?${params.toString()}`, { replaceState: true });
+				return goto(`?${params.toString()}`, { replaceState: true });
 			})
 			.catch((err) => {
 				console.error('Location error:', err);
 				alert('Check your browser permissions.');
-			});
+			})
+			.finally(() => isLoading.set(false));
 	}
 
 	function useCustomAddress(addressInput: string) {
 		if (!addressInput) return;
+		isLoading.set(true);
+
 		fetch(
 			`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(addressInput)}&format=json&limit=1`
 		)
@@ -54,8 +59,17 @@
 				const params = new URLSearchParams(window.location.search);
 				params.set('lat', place.lat);
 				params.set('lon', place.lon);
-				goto(`?${params.toString()}`, { replaceState: true });
-			});
+				return goto(`?${params.toString()}`, { replaceState: true });
+			})
+			.finally(() => isLoading.set(false));
+	}
+
+	async function distanceChange(distance: number) {
+		isLoading.set(true);
+		const params = new URLSearchParams(window.location.search);
+		params.set('distance', distance.toString());
+		await goto(`?${params.toString()}`, { replaceState: true });
+		isLoading.set(false);
 	}
 
 	function toggleFavorite(id: string) {
@@ -72,6 +86,7 @@
 		{pickRandom}
 		{refreshLocation}
 		{useCustomAddress}
+		{distanceChange}
 		distance={data.distance}
 		onToggleFavourites={(val) => (showFavouritesOnly = val)}
 		onToggleOpen={(val) => (showOnlyOpen = val)}
@@ -81,9 +96,15 @@
 		<PickedCard restaurant={picked} />
 	{/if}
 
-	<div class="grid gap-2">
-		{#each restaurants as restaurant (restaurant.id)}
-			<RestaurantListItem {restaurant} {toggleFavorite} />
-		{/each}
-	</div>
+	{#if $isLoading}
+		<div class="flex items-center justify-center">
+			<span class="loading loading-md loading-spinner text-primary"></span>
+		</div>
+	{:else}
+		<div class="grid gap-2">
+			{#each restaurants as restaurant (restaurant.id)}
+				<RestaurantListItem {restaurant} {toggleFavorite} />
+			{/each}
+		</div>
+	{/if}
 </div>

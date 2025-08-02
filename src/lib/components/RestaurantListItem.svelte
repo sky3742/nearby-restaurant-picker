@@ -27,7 +27,7 @@
 			<strong>{restaurant.name}</strong>
 		</a>
 		<div class="flex items-center gap-2">
-			<span class="badge badge-neutral">
+			<span class="badge text-nowrap badge-neutral">
 				{restaurant.distance.toFixed(2)} km
 			</span>
 			<button
