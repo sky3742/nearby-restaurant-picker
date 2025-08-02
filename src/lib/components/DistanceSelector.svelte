@@ -6,7 +6,7 @@
 </script>
 
 <fieldset class="fieldset">
-	<label class="label">
+	<label class="label grid">
 		Distance
 
 		<div class="flex flex-wrap gap-2">
