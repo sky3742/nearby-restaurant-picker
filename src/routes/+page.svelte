@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { PickedCard, RestaurantListItem, RestaurantPickerHeader } from '$lib/components';
+	import { RestaurantListItem, RestaurantPickerHeader } from '$lib/components';
 	import { favorites, isLoading } from '$lib/stores';
 	import type { Restaurant } from '$lib/types';
 	import { getBrowserLocation } from '$lib/utils';
@@ -10,7 +10,6 @@
 		distance: number;
 	};
 
-	let picked: Restaurant;
 	let showFavouritesOnly = false;
 	let showOnlyOpen = false;
 
@@ -23,11 +22,6 @@
 			if (b.isOpen === true) return 1;
 			return 0;
 		});
-
-	function pickRandom() {
-		if (!restaurants.length) return;
-		picked = restaurants[Math.floor(Math.random() * restaurants.length)];
-	}
 
 	function refreshLocation() {
 		isLoading.set(true);
@@ -83,7 +77,7 @@
 	<RestaurantPickerHeader
 		{showFavouritesOnly}
 		{showOnlyOpen}
-		{pickRandom}
+		{restaurants}
 		{refreshLocation}
 		{useCustomAddress}
 		{distanceChange}
@@ -91,10 +85,6 @@
 		onToggleFavourites={(val) => (showFavouritesOnly = val)}
 		onToggleOpen={(val) => (showOnlyOpen = val)}
 	/>
-
-	{#if picked}
-		<PickedCard restaurant={picked} />
-	{/if}
 
 	{#if $isLoading}
 		<div class="flex items-center justify-center">
