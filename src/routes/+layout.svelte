@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { isLoading } from '$lib/stores';
-	import { getBrowserLocation } from '$lib/utils';
+	import { refreshLocation } from '$lib/utils';
 	import { injectAnalytics } from '@vercel/analytics/sveltekit';
 	import { injectSpeedInsights } from '@vercel/speed-insights/sveltekit';
 	import { onMount } from 'svelte';
+	import { SvelteURLSearchParams } from 'svelte/reactivity';
 	import { pwaInfo } from 'virtual:pwa-info';
 	import '../app.css';
 
@@ -12,45 +12,18 @@
 	injectAnalytics({ debug: false });
 	injectSpeedInsights({ debug: false });
 
-	onMount(async () => {
-		const params = new URLSearchParams(window.location.search);
+	onMount(() => {
+		const params = new SvelteURLSearchParams(window.location.search);
 		const hasLat = params.has('lat');
 		const hasLon = params.has('lon');
 
-		if (!hasLat || !hasLon) {
-			try {
-				isLoading.set(true);
-				const { lat, lon } = await getBrowserLocation();
-				params.set('lat', lat.toString());
-				params.set('lon', lon.toString());
-
-				window.location.search = params.toString(); // triggers reload
-			} catch (err) {
-				console.error('Failed to get location:', err);
-				alert('Unable to access location. Please enable it in your browser.');
-			} finally {
-				isLoading.set(false);
-			}
-		}
+		if (!hasLat || !hasLon) refreshLocation();
 	});
 
 	onMount(async () => {
 		if (pwaInfo) {
 			const { registerSW } = await import('virtual:pwa-register');
-			registerSW({
-				immediate: true,
-				onRegistered(r) {
-					// uncomment following code if you want check for updates
-					// r && setInterval(() => {
-					//    console.log('Checking for sw update')
-					//    r.update()
-					// }, 20000 /* 20s for testing purposes */)
-					console.log(`SW Registered: ${r}`);
-				},
-				onRegisterError(error) {
-					console.log('SW registration error', error);
-				}
-			});
+			registerSW();
 		}
 	});
 

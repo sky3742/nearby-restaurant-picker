@@ -3,7 +3,8 @@
 	import { RestaurantListItem, RestaurantPickerHeader } from '$lib/components';
 	import { favorites, isLoading } from '$lib/stores';
 	import type { Restaurant } from '$lib/types';
-	import { getBrowserLocation } from '$lib/utils';
+	import { refreshLocation } from '$lib/utils';
+	import { SvelteURLSearchParams } from 'svelte/reactivity';
 
 	export let data: {
 		restaurants: Restaurant[];
@@ -23,23 +24,6 @@
 			return 0;
 		});
 
-	function refreshLocation() {
-		isLoading.set(true);
-
-		getBrowserLocation()
-			.then(({ lat, lon }) => {
-				const params = new URLSearchParams(window.location.search);
-				params.set('lat', lat.toString());
-				params.set('lon', lon.toString());
-				return goto(`?${params.toString()}`, { replaceState: true });
-			})
-			.catch((err) => {
-				console.error('Location error:', err);
-				alert('Check your browser permissions.');
-			})
-			.finally(() => isLoading.set(false));
-	}
-
 	function useCustomAddress(addressInput: string) {
 		if (!addressInput) return;
 		isLoading.set(true);
@@ -50,7 +34,7 @@
 			.then((res) => res.json())
 			.then(([place]) => {
 				if (!place) return alert('Address not found');
-				const params = new URLSearchParams(window.location.search);
+				const params = new SvelteURLSearchParams(window.location.search);
 				params.set('lat', place.lat);
 				params.set('lon', place.lon);
 				return goto(`?${params.toString()}`, { replaceState: true });
@@ -60,7 +44,7 @@
 
 	async function distanceChange(distance: number) {
 		isLoading.set(true);
-		const params = new URLSearchParams(window.location.search);
+		const params = new SvelteURLSearchParams(window.location.search);
 		params.set('distance', distance.toString());
 		await goto(`?${params.toString()}`, { replaceState: true });
 		isLoading.set(false);
