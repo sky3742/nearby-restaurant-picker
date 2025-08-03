@@ -42,5 +42,7 @@
 </button>
 
 {#if picked}
-	<PickedCard restaurant={picked} {isPicking} />
+	<div class="md:col-span-2">
+		<PickedCard restaurant={picked} {isPicking} />
+	</div>
 {/if}
