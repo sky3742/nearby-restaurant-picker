@@ -26,14 +26,15 @@
 			registerSW();
 		}
 	});
-
-	const webManifest = $derived(pwaInfo ? pwaInfo.webManifest.linkTag : '');
 </script>
 
 <svelte:head>
 	<title>What To Eat</title>
 	<meta name="description" content="Find nearby restaurants and pick a random one to eat at." />
-	{@html webManifest}
+
+	{#if pwaInfo?.webManifest.href}
+		<link rel="manifest" href={pwaInfo.webManifest.href} />
+	{/if}
 </svelte:head>
 
 {@render children()}
