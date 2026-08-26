@@ -7,15 +7,10 @@
 
 	let { children } = $props();
 
-	onMount(() => {
-		const params = new SvelteURLSearchParams(window.location.search);
-		const hasLat = params.has('lat');
-		const hasLon = params.has('lon');
-
-		if (!hasLat || !hasLon) refreshLocation();
-	});
-
 	onMount(async () => {
+		const params = new SvelteURLSearchParams(window.location.search);
+		if (!params.has('lat') || !params.has('lon')) refreshLocation();
+
 		if (pwaInfo) {
 			const { registerSW } = await import('virtual:pwa-register');
 			registerSW();

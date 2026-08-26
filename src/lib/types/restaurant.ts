@@ -4,6 +4,5 @@ export type Restaurant = {
 	lat: number;
 	lon: number;
 	distance: number;
-	openingHours?: string;
 	isOpen?: boolean;
 };

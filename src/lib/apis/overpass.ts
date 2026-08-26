@@ -1,5 +1,16 @@
-import type { OverpassResponse, Restaurant } from '$lib/types';
+import type { Restaurant } from '$lib/types';
 import { haversineDistance, isOpenNow } from '$lib/utils';
+
+type OverpassResponse = {
+	elements: Array<{
+		type: string;
+		id: string;
+		tags?: Record<string, string>;
+		lat?: number;
+		lon?: number;
+		center?: { lat: number; lon: number };
+	}>;
+};
 
 export async function getRestaurants(
 	lat: number,
@@ -33,15 +44,11 @@ export async function getRestaurants(
 	return data.elements
 		.filter((el) => el.tags?.name)
 		.map((el) => ({
-			...el,
+			id: `${el.type}/${el.id}`,
+			name: el.tags!.name,
 			lat: el.lat || el.center!.lat,
-			lon: el.lon || el.center!.lon
-		}))
-		.map((el) => ({
-			...el,
-			name: el.tags?.name || 'Unnamed restaurant',
-			openingHours: el.tags?.opening_hours || 'Unknown',
+			lon: el.lon || el.center!.lon,
 			isOpen: el.tags?.opening_hours ? isOpenNow(el.tags.opening_hours) : undefined,
-			distance: haversineDistance(lat, lon, el.lat, el.lon)
+			distance: haversineDistance(lat, lon, el.lat || el.center!.lat, el.lon || el.center!.lon)
 		})) as Restaurant[];
 }
