@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { DistanceSelector, RandomPicker } from '$lib/components';
 	import type { Restaurant } from '$lib/types';
-	import { MapPin, RefreshCcw } from 'lucide-svelte';
+	import { MapPin, RefreshCcw } from '@lucide/svelte';
 
 	let addressInput: string;
 

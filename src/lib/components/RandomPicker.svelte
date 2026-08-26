@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { PickedCard } from '$lib/components';
 	import type { Restaurant } from '$lib/types';
-	import { Dice5 } from 'lucide-svelte';
+	import { Dice5 } from '@lucide/svelte';
 
 	export let restaurants: Restaurant[];
 

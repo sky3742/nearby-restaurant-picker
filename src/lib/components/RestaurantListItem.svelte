@@ -2,7 +2,7 @@
 	import { favorites } from '$lib/stores';
 	import type { Restaurant } from '$lib/types';
 	import { getMapLink } from '$lib/utils';
-	import { Star } from 'lucide-svelte';
+	import { Star } from '@lucide/svelte';
 
 	export let restaurant: Restaurant;
 	export let toggleFavorite: (id: string) => void;
