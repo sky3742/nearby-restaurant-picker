@@ -1,28 +1,48 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
 	import { RestaurantListItem, RestaurantPickerHeader } from '$lib/components';
+	import { getRestaurants } from '$lib/apis';
 	import { favorites, isLoading } from '$lib/stores';
 	import type { Restaurant } from '$lib/types';
 	import { refreshLocation } from '$lib/utils';
 	import { SvelteURLSearchParams } from 'svelte/reactivity';
 
-	export let data: {
-		restaurants: Restaurant[];
-		distance: number;
-	};
+	let restaurants = $state<Restaurant[]>([]);
+	let distance = $state(1000);
+	let showFavouritesOnly = $state(false);
+	let showOnlyOpen = $state(false);
 
-	let showFavouritesOnly = false;
-	let showOnlyOpen = false;
+	let filtered = $derived(
+		restaurants
+			.filter((r) => !showOnlyOpen || r.isOpen)
+			.filter((r) => !showFavouritesOnly || $favorites.includes(r.id))
+			.sort((a, b) => {
+				if (a.isOpen === b.isOpen) return a.distance - b.distance;
+				if (a.isOpen === true) return -1;
+				if (b.isOpen === true) return 1;
+				return 0;
+			})
+	);
 
-	$: restaurants = data.restaurants
-		.filter((r) => !showOnlyOpen || r.isOpen)
-		.filter((r) => !showFavouritesOnly || $favorites.includes(r.id))
-		.sort((a, b) => {
-			if (a.isOpen === b.isOpen) return a.distance - b.distance;
-			if (a.isOpen === true) return -1;
-			if (b.isOpen === true) return 1;
-			return 0;
-		});
+	$effect(() => {
+		const url = $page.url;
+		const params = url.searchParams;
+		const lat = parseFloat(params.get('lat') || '0');
+		const lon = parseFloat(params.get('lon') || '0');
+		distance = parseInt(params.get('distance') ?? '1000');
+
+		if (!lat || !lon) {
+			restaurants = [];
+			return;
+		}
+
+		isLoading.set(true);
+		getRestaurants(lat, lon, distance)
+			.then((r) => (restaurants = r))
+			.catch(() => (restaurants = []))
+			.finally(() => isLoading.set(false));
+	});
 
 	function useCustomAddress(addressInput: string) {
 		if (!addressInput) return;
@@ -42,12 +62,10 @@
 			.finally(() => isLoading.set(false));
 	}
 
-	async function distanceChange(distance: number) {
-		isLoading.set(true);
+	async function distanceChange(newDistance: number) {
 		const params = new SvelteURLSearchParams(window.location.search);
-		params.set('distance', distance.toString());
+		params.set('distance', newDistance.toString());
 		await goto(`?${params.toString()}`, { replaceState: true });
-		isLoading.set(false);
 	}
 
 	function toggleFavorite(id: string) {
@@ -61,11 +79,11 @@
 	<RestaurantPickerHeader
 		{showFavouritesOnly}
 		{showOnlyOpen}
-		{restaurants}
+		restaurants={filtered}
 		{refreshLocation}
 		{useCustomAddress}
 		{distanceChange}
-		distance={data.distance}
+		{distance}
 		onToggleFavourites={(val) => (showFavouritesOnly = val)}
 		onToggleOpen={(val) => (showOnlyOpen = val)}
 	/>
@@ -76,7 +94,7 @@
 		</div>
 	{:else}
 		<div class="grid gap-2">
-			{#each restaurants as restaurant (restaurant.id)}
+			{#each filtered as restaurant (restaurant.id)}
 				<RestaurantListItem {restaurant} {toggleFavorite} />
 			{/each}
 		</div>
