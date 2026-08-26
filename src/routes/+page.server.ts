@@ -1,3 +1,4 @@
+import { error } from '@sveltejs/kit';
 import { getRestaurants } from '$lib/apis';
 import type { PageServerLoad } from './$types';
 
@@ -8,7 +9,10 @@ export const load: PageServerLoad = async ({ url }) => {
 
 	if (!lat || !lon) return { restaurants: [] };
 
-	const restaurants = await getRestaurants(lat, lon, distance);
-
-	return { restaurants, distance };
+	try {
+		const restaurants = await getRestaurants(lat, lon, distance);
+		return { restaurants, distance };
+	} catch {
+		throw error(503, 'Restaurant data is temporarily unavailable. Please try again later.');
+	}
 };
