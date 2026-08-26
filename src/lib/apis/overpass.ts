@@ -16,13 +16,19 @@ export async function getRestaurants(
     out center;
   `;
 
-	const response = await fetch('https://overpass-api.de/api/interpreter', {
-		method: 'POST',
-		headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-		body: `data=${encodeURIComponent(query)}`
-	});
+	const body = `data=${encodeURIComponent(query)}`;
+	const headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
+	const opts = { method: 'POST', headers, body, signal: AbortSignal.timeout(15_000) };
 
-	const data = (await response.json()) as OverpassResponse;
+	let res: Response;
+	try {
+		res = await fetch('https://overpass-api.de/api/interpreter', opts);
+	} catch {
+		res = await fetch('https://maps.mail.ru/osm/tools/overpass/api/interpreter', opts);
+	}
+	if (!res.ok) throw new Error('Overpass API unavailable');
+
+	const data = (await res.json()) as OverpassResponse;
 
 	return data.elements
 		.filter((el) => el.tags?.name)

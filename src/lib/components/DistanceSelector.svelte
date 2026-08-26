@@ -12,7 +12,7 @@
 		<div class="flex flex-wrap gap-2">
 			{#each options as option (option)}
 				<button
-					class="btn btn-sm btn-primary"
+					class="btn btn-primary btn-sm"
 					class:btn-outline={distance !== option}
 					on:click={() => onChange(option * 1000)}
 					aria-pressed={distance === option}
